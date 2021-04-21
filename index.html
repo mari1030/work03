@@ -8,7 +8,44 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="main">
+    <div>
+      <h1>ToDoリスト</h1>
+      <div class="radio__area">
+        <label for="all">
+          <input type="radio" name="" id="all" value="すべて" checked>
+          <span>すべて</span>
+        </label>
+        <label for="running">
+          <input type="radio" name="" id="running" value="作業中">
+          <span>作業中</span>
+        </label>
+        <label for="done">
+          <input type="radio" name="" id="done" value="完了">
+          <span>完了</span>
+        </label>
+      </div>
+    
+      <div class="table-area">
+        <table>
+          <tbody id="js-table">
+            <tr>
+              <th>ID</th>
+              <th>コメント</th>
+              <th>状態</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+      <div class="input-area">
+        <h2>新規タスクの追加</h2>
+        <input type="text" name="" id="js-input">
+        <button type="button" id="js-input-button">追加</button>
+      </div>
+    </div>
+
+  </main>
   <script src="js/main.js"></script>
 </body>
 </html>
