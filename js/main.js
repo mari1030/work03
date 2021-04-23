@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   let inputTask = document.querySelector("#js-input");
-  let id = 1;
   const inputButton = document.querySelector("#js-input-button");
-  const table = document.querySelector("#js-table");
+  const todos = [];
 
   inputButton.addEventListener('click', function(){
     
@@ -10,11 +9,21 @@ document.addEventListener('DOMContentLoaded', function() {
       alert("タスクを入力してください");
     }
 
-    const tableElement = document.createElement("tr");
-    tableElement.innerHTML = `<td>${id}</td><td>${inputTask.value}</td><td><button type="button">削除</td>`
-    table.appendChild(tableElement);
-    inputTask.value = "";
-    id++;
-  });
+    const todo = {
+      task: `${inputTask.value}`,
+      status: '作業中',
+    }
 
+    todos.push(todo);
+    displayTodos(todos);
+    inputTask.value = "";
+  });
 });
+
+function displayTodos(array) {
+    const table = document.querySelector("#js-table");
+    const tableElement = document.createElement("tr");
+
+    tableElement.innerHTML = `<td>${array.length - 1}</td><td>${array[array.length - 1].task}</td><td><button type="button">削除</td>`
+    table.appendChild(tableElement);
+}
