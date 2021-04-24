@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const inputTask = document.querySelector('#js-input');
+  const inputTask = document.getElementById('js-input');
   const inputButton = document.getElementById('js-input-button');
   const todos = [];
 
@@ -35,7 +35,7 @@ function displayTodos(array) {
     const deleteElement = createDeleteBtn();
 
     tableElement.innerHTML = `<td>${array.length - 1}</td><td>${array[array.length - 1].task}</td><td>${statusElement.outerHTML}</td><td>${deleteElement.outerHTML}</td>`;
-    
+
     table.appendChild(tableElement);
 }
 
