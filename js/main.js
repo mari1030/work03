@@ -26,12 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
 function deleteTr(e) {
   // 押下された削除ボタンの列のid
   const trId = e.target.id;
-  
+
+  // todosから指定の要素を削除する
+  todos = deleteTodo(trId, this.name);
   // 押下された削除ボタンの列のtr
   const targetTr = document.getElementById(`tr${trId}`);
   // 押下された削除ボタンの列のtrを消去
   targetTr.remove();
-
+  // todoリストのindexを振り直す
   updateIndex();
 }
 
@@ -55,10 +57,18 @@ function addTodo(task) {
   return todo;
 }
 
+// todosの消去された要素を消去
+function deleteTodo(id, todos) {
+  todos.splice(id, 1);
+  return todos;
+}
+
 // 追加されたタスクを画面に表示する
 function displayTodos(array) {
     const table = document.getElementById('js-table');
     const tableElement = document.createElement('tr');
+    const tableTdId = document.createElement('td');
+    const tableTdContent = document.createElement('td');
     const tableTdStatus = document.createElement('td');
     const tableTdDelete = document.createElement('td');
 
@@ -66,7 +76,10 @@ function displayTodos(array) {
     const deleteElement = createDeleteBtn(array);
 
     array.forEach(function(element, index) {
-      tableElement.innerHTML = `<td>${index}</td><td>${element.task}</td>`;
+      tableElement.appendChild(tableTdId);
+      tableTdId.textContent = index;
+      tableElement.appendChild(tableTdContent);
+      tableTdContent.textContent = element.task;
     });
 
     table.appendChild(tableElement);
