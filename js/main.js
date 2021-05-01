@@ -63,6 +63,14 @@ function deleteTodo(id, todos) {
   return todos;
 }
 
+function switchStatus() {
+  if(this.name.innerText === '作業中') {
+    this.name.innerText = '完了'
+  } else {
+    this.name.innerText = '作業中'
+  }
+}
+
 // 追加されたタスクを画面に表示する
 function displayTodos(array) {
     const table = document.getElementById('js-table');
@@ -99,6 +107,8 @@ function displayTodos(array) {
 function createStatusBtn() {
   const statusElement = document.createElement('button');
   statusElement.innerText = '作業中';
+  // 作業中ボタンにクリック関数をもたせる
+  statusElement.addEventListener('click' , {name: statusElement, handleEvent: switchStatus}, false);
   return statusElement;
 }
 

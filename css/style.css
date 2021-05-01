@@ -1,3 +1,19 @@
 .table-area th {
   font-weight: bold;
 }
+
+.table-area th:first-child {
+  width: 3rem;
+}
+
+.table-area th:nth-child(2) {
+  width: 200px;
+}
+
+.table-area th:nth-child(3) {
+  width: 4rem;
+}
+
+.table-area td:first-child {
+  text-align: center;
+}

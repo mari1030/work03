@@ -1,5 +1,22 @@
 .table-area {
   th {
     font-weight: bold;
+    &:first-child {
+      width: 3rem;
+    }
+
+    &:nth-child(2) {
+      width: 200px;
+    }
+
+    &:nth-child(3) {
+      width: 4rem;
+    }
+  }
+
+  td {
+    &:first-child {
+      text-align: center;
+    }
   }
 }
