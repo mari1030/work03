@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const inputButton = document.getElementById('js-input-button');
   const deleteButton = document.getElementById('js-delete-button');
   const todos = [];
+  const radioAll = document.getElementById('all');
+  const radioRunning = document.getElementById('running');
+  const radioDone = document.getElementById('done');
+  const radioStatus = document.querySelectorAll('input[type="radio"]');
 
   inputButton.addEventListener('click', function(){
     
@@ -15,11 +19,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
     todos.push(todo);
     
-    displayTodos(todos);
+    displayTodos(todos, radioStatus);
     
     inputTask.value = "";
 
   });
+
+  radioAll.addEventListener('click' , function() {
+    
+    document.querySelectorAll('[id^="tr"]').forEach(function(element) {
+      element.remove();
+    });
+
+    displayTodos(todos, radioStatus);
+  });
+
+  radioRunning.addEventListener('click' , function() {
+
+    const test = todos.filter((val) => {
+      return val.status === '作業中';
+    });
+
+    document.querySelectorAll('[id^="tr"]').forEach(function(element) {
+      element.remove();
+    });
+
+    displayTodos(test, radioStatus);
+  });
+
+  radioDone.addEventListener('click' , function() {
+    const test = todos.filter((val) => {
+      return val.status === '完了';
+    });
+
+    document.querySelectorAll('[id^="tr"]').forEach(function(element) {
+      element.remove();
+    });
+
+    displayTodos(test, radioStatus);
+  });
+
 });
 
 // 削除ボタンを押下したときにその一列を削除する
@@ -63,52 +102,93 @@ function deleteTodo(id, todos) {
   return todos;
 }
 
-function switchStatus() {
-  if(this.name.innerText === '作業中') {
-    this.name.innerText = '完了'
+function switchStatus(e) {
+  todos = this.name;
+
+  // 押下された削除ボタンの列のid
+  const statusId = e.target.id;
+  const index = statusId.slice(6);
+  const targetButton = document.getElementById(statusId);
+  
+  if(targetButton.innerText === '作業中'){
+    targetButton.textContent = '完了';
+    todos[index].status = '完了';
   } else {
-    this.name.innerText = '作業中'
+    targetButton.textContent = '作業中';
+    todos[index].status = '作業中';
   }
-}
+
+  const radioStatus = document.querySelectorAll('input[type="radio"]');
+  radioStatus.forEach(function(element) {
+    if((element.checked === true && element.value === '作業中') || (element.checked === true && element.value === '完了')) {
+      const targetTr = document.getElementById(`tr${index}`);
+      targetTr.style.display = 'none';
+    } else {
+      return;
+    }
+  });
+  }
 
 // 追加されたタスクを画面に表示する
-function displayTodos(array) {
+function displayTodos(array, radioStatus) {
     const table = document.getElementById('js-table');
-    const tableElement = document.createElement('tr');
-    const tableTdId = document.createElement('td');
-    const tableTdContent = document.createElement('td');
-    const tableTdStatus = document.createElement('td');
-    const tableTdDelete = document.createElement('td');
-
-    const statusElement = createStatusBtn();
-    const deleteElement = createDeleteBtn(array);
-
-    array.forEach(function(element, index) {
-      tableElement.appendChild(tableTdId);
-      tableTdId.textContent = index;
-      tableElement.appendChild(tableTdContent);
-      tableTdContent.textContent = element.task;
+        
+    document.querySelectorAll('[id^="tr"]').forEach((element) => {
+      element.remove();
     });
 
-    table.appendChild(tableElement);
-    tableElement.id = `tr${array.length - 1}`;
-    // 末尾にtd作成
-    tableElement.appendChild(tableTdStatus);
-    // 作業中ボタン追加
-    tableTdStatus.appendChild(statusElement);
-    // 末尾にtd作成
-    tableElement.appendChild(tableTdDelete);
-    // 削除ボタン追加
-    tableTdDelete.appendChild(deleteElement);
-    deleteElement.id = array.length - 1;
+    radioStatus.forEach(function(element) {
+      if(element.checked === true && element.value === '作業中') {
+        array = array.filter((val) => {
+          return val.status === '作業中';
+        });
+      } else if(element.checked === true && element.value === '完了') {
+        array = array.filter((val) => {
+          return val.status === '完了';
+        });
+      } else {
+        return array;
+      }
+    });
+
+    for(let i = 0; i < array.length; i++) {
+      const tableElement = document.createElement('tr');
+      const tableTdId = document.createElement('td');
+      const tableTdContent = document.createElement('td');
+      const tableTdStatus = document.createElement('td');
+      const tableTdDelete = document.createElement('td');
+      
+      const statusElement = createStatusBtn(array, i);
+      const deleteElement = createDeleteBtn(array);
+
+
+      table.appendChild(tableElement);
+      tableElement.id = `tr${i}`;
+      
+      tableElement.appendChild(tableTdId);
+      tableTdId.textContent = i;
+      tableElement.appendChild(tableTdContent);
+      tableTdContent.textContent = array[i].task;
+
+      // 末尾にtd作成
+      tableElement.appendChild(tableTdStatus);
+      // 作業中ボタン追加
+      tableTdStatus.appendChild(statusElement);
+      statusElement.id = `status${i}`;
+      // 末尾にtd作成
+      tableElement.appendChild(tableTdDelete);
+      // 削除ボタン追加
+      tableTdDelete.appendChild(deleteElement);
+      deleteElement.id = i;
+    }
 }
 
 // 作業中ボタンを作成する
-function createStatusBtn() {
+function createStatusBtn(todos, index) {
   const statusElement = document.createElement('button');
-  statusElement.innerText = '作業中';
+  statusElement.innerText = todos[index].status;
   // 作業中ボタンにクリック関数をもたせる
-  statusElement.addEventListener('click' , {name: statusElement, handleEvent: switchStatus}, false);
+  statusElement.addEventListener('click' , {name: todos, handleEvent: switchStatus}, false);
   return statusElement;
 }
 
