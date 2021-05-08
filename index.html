@@ -5,10 +5,47 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JavaScript課題③</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <main class="main">
+    <div>
+      <h1>ToDoリスト</h1>
+      <div class="radio__area">
+        <label for="all">
+          <input type="radio" name="radio" id="all" value="すべて" checked>
+          <span>すべて</span>
+        </label>
+        <label for="running">
+          <input type="radio" name="radio" id="running" value="作業中">
+          <span>作業中</span>
+        </label>
+        <label for="done">
+          <input type="radio" name="radio" id="done" value="完了">
+          <span>完了</span>
+        </label>
+      </div>
+    
+      <div class="table-area">
+        <table>
+          <thead>
+              <th>ID</th>
+              <th>コメント</th>
+              <th>状態</th>
+          </thead>
+          <tbody id="js-table">
+          </tbody>
+        </table>
+      </div>
 
+      <div class="input-area">
+        <h2>新規タスクの追加</h2>
+        <input type="text" name="" id="js-input">
+        <button type="button" id="js-input-button">追加</button>
+      </div>
+    </div>
+
+  </main>
   <script src="js/main.js"></script>
 </body>
 </html>
