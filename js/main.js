@@ -36,27 +36,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   radioRunning.addEventListener('click' , function() {
 
-    const test = todos.filter((val) => {
-      return val.status === '作業中';
-    });
+    const statusRunning = todos;
 
-    document.querySelectorAll('[id^="tr"]').forEach(function(element) {
-      element.remove();
-    });
-
-    displayTodos(test, radioStatus);
+    displayTodos(statusRunning, radioStatus);
   });
 
   radioDone.addEventListener('click' , function() {
-    const test = todos.filter((val) => {
-      return val.status === '完了';
-    });
+    
+    const statusDone = todos;
 
-    document.querySelectorAll('[id^="tr"]').forEach(function(element) {
-      element.remove();
-    });
-
-    displayTodos(test, radioStatus);
+    displayTodos(statusDone, radioStatus);
   });
 
 });
@@ -139,12 +128,16 @@ function displayTodos(array, radioStatus) {
 
     radioStatus.forEach(function(element) {
       if(element.checked === true && element.value === '作業中') {
-        array = array.filter((val) => {
-          return val.status === '作業中';
+        array = array.map((val) => {
+          if(val.status === '作業中') {
+            return val;
+          }
         });
       } else if(element.checked === true && element.value === '完了') {
-        array = array.filter((val) => {
-          return val.status === '完了';
+        array = array.map((val) => {
+          if(val.status === '完了') {
+            return val;
+          }
         });
       } else {
         return array;
@@ -152,39 +145,41 @@ function displayTodos(array, radioStatus) {
     });
 
     for(let i = 0; i < array.length; i++) {
-      const tableElement = document.createElement('tr');
-      const tableTdId = document.createElement('td');
-      const tableTdContent = document.createElement('td');
-      const tableTdStatus = document.createElement('td');
-      const tableTdDelete = document.createElement('td');
-      
-      const statusElement = createStatusBtn(array, i);
-      const deleteElement = createDeleteBtn(array);
-
-
-      table.appendChild(tableElement);
-      tableElement.id = `tr${i}`;
-      
-      tableElement.appendChild(tableTdId);
-      tableTdId.textContent = i;
-      tableElement.appendChild(tableTdContent);
-      tableTdContent.textContent = array[i].task;
-
-      // 末尾にtd作成
-      tableElement.appendChild(tableTdStatus);
-      // 作業中ボタン追加
-      tableTdStatus.appendChild(statusElement);
-      statusElement.id = `status${i}`;
-      // 末尾にtd作成
-      tableElement.appendChild(tableTdDelete);
-      // 削除ボタン追加
-      tableTdDelete.appendChild(deleteElement);
-      deleteElement.id = i;
+      if(array[i] !== undefined) {
+        const tableElement = document.createElement('tr');
+        const tableTdId = document.createElement('td');
+        const tableTdContent = document.createElement('td');
+        const tableTdStatus = document.createElement('td');
+        const tableTdDelete = document.createElement('td');
+        
+        const statusElement = createStatusBtn(array, i);
+        const deleteElement = createDeleteBtn(array);
+  
+  
+        table.appendChild(tableElement);
+        tableElement.id = `tr${i}`;
+        
+        tableElement.appendChild(tableTdId);
+        tableTdId.textContent = i;
+        tableElement.appendChild(tableTdContent);
+        tableTdContent.textContent = array[i].task;
+  
+        // 末尾にtd作成
+        tableElement.appendChild(tableTdStatus);
+        // 作業中ボタン追加
+        tableTdStatus.appendChild(statusElement);
+        statusElement.id = `status${i}`;
+        // 末尾にtd作成
+        tableElement.appendChild(tableTdDelete);
+        // 削除ボタン追加
+        tableTdDelete.appendChild(deleteElement);
+        deleteElement.id = i;
+      }
     }
 }
 
 // 作業中ボタンを作成する
-function createStatusBtn(todos, index) {
+const createStatusBtn = (todos, index) => {
   const statusElement = document.createElement('button');
   statusElement.innerText = todos[index].status;
   // 作業中ボタンにクリック関数をもたせる
@@ -193,7 +188,7 @@ function createStatusBtn(todos, index) {
 }
 
 // 削除ボタンを作成する
-function createDeleteBtn(todos) {
+const createDeleteBtn = (todos) => {
   const deleteElement = document.createElement('button');
   deleteElement.innerText = '削除';
 
